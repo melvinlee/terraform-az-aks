@@ -32,7 +32,7 @@ variable "agent_pools" {
 }
 
 variable "linux_admin_username" {
-  description = "(Required) User name for authentication to the Kubernetes linux agent virtual machines in the cluster."
+  description = "(Optional) User name for authentication to the Kubernetes linux agent virtual machines in the cluster."
   type        = "string"
   default     = "azureuser"
 }
@@ -47,7 +47,18 @@ variable "tags" {
 }
 
 variable "addon_profile" {
-  description = "(Required) AddOn Profile block."
+  description = "(Optional) AddOn Profile block."
+  default = {
+    oms_agent = {
+      enabled = true # Enable Container Monitoring
+    }
+    http_application_routing = {
+      enabled = false # Disable HTTP Application Routing
+    }
+    kube_dashboard = {
+      enabled = false # Disable Kubernetes Dashboard
+    }
+  }
 }
 
 variable "log_analytics_workspace" {
