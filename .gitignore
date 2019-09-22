@@ -1,0 +1,6 @@
+.terraform
+terraform.tfstate
+terraform-provider-kubernetes*
+*.tfstate*
+*.tfvars
+*.tfplan
