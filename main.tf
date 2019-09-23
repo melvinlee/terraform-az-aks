@@ -1,9 +1,3 @@
-resource "tls_private_key" "key" {
-  algorithm   = "RSA"
-  ecdsa_curve = "P224"
-  rsa_bits    = "2048"
-}
-
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = var.name
   dns_prefix          = var.name
@@ -20,23 +14,24 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
+  #retrieve the latest version of Kubernetes supported by Azure Kubernetes Service if version is not set
   kubernetes_version = "${var.kubernetes_version != "" ? var.kubernetes_version : data.azurerm_kubernetes_service_versions.current.latest_version}"
 
   dynamic "agent_pool_profile" {
     for_each = var.agent_pools
     content {
-      name                = agent_pool_profile.value[0]
-      count               = agent_pool_profile.value[1]
-      vm_size             = agent_pool_profile.value[2]
-      os_type             = agent_pool_profile.value[3]
-      os_disk_size_gb     = agent_pool_profile.value[4]
+      name                = agent_pool_profile.value.name
+      count               = agent_pool_profile.value.count
+      vm_size             = agent_pool_profile.value.vm_size
+      os_type             = agent_pool_profile.value.os_type
+      os_disk_size_gb     = agent_pool_profile.value.os_disk_size_gb
       vnet_subnet_id      = var.agent_pool_subnet_id
-      type                = agent_pool_profile.value[5]
-      availability_zones  = split(",", agent_pool_profile.value[6])
-      enable_auto_scaling = tobool(agent_pool_profile.value[7])
-      min_count           = agent_pool_profile.value[8]
-      max_count           = agent_pool_profile.value[9]
-      max_pods            = agent_pool_profile.value[10]
+      type                = "VirtualMachineScaleSets"
+      availability_zones  = agent_pool_profile.value.availability_zones
+      enable_auto_scaling = agent_pool_profile.value.enable_auto_scaling
+      min_count           = agent_pool_profile.value.min_count
+      max_count           = agent_pool_profile.value.max_count
+      max_pods            = agent_pool_profile.value.max_pods
     }
   }
 

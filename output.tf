@@ -19,3 +19,8 @@ $ export KUBECONFIG=~/.kube/aksconfig
 CONFIGURE
 
 }
+
+output "ssh_key" {
+  value = tls_private_key.key
+  sensitive   = true
+}

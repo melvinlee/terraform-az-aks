@@ -24,11 +24,31 @@ variable "agent_pool_subnet_id" {
 }
 
 variable "agent_pools" {
-  description = "(Required) List of agent_pools profile"
-  default = [
-    # "name", "count", "vm_size", "os_type", "os_disk_size_gb", "type", "enable_auto_scaling", "min_count", "max_count", "max_pods"
-    ["default", "1", "Standard_D2s_v3", "Linux", "50", "VirtualMachineScaleSets", "true", "1", "3", "30"]
-  ]
+  description = "(Optional) List of agent_pools profile for multiple node pools"
+  type = list(object({
+    name                = string
+    count               = number
+    vm_size             = string
+    os_type             = string
+    os_disk_size_gb     = number
+    max_pods            = number
+    availability_zones  = list(number)
+    enable_auto_scaling = bool
+    min_count           = number
+    max_count           = number
+  }))
+  default = [{
+    name                = "default"
+    count               = 1
+    vm_size             = "Standard_D2s_v3"
+    os_type             = "Linux"
+    os_disk_size_gb     = 50
+    max_pods            = 30
+    availability_zones  = [1, 2, 3]
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 3
+  }]
 }
 
 variable "linux_admin_username" {
@@ -83,6 +103,10 @@ variable "network_profile" {
 
 variable "service_principal" {
   description = "(Required) The Service Principal to create aks."
+  type = object({
+    client_id     = string
+    client_secret = string
+  })
 }
 
 variable "opslogs_retention_period" {

@@ -3,7 +3,7 @@
 Create Azure Kubernetes Services
 
 - Advanced Networking 
-- Multiple Agent_pools
+- Multiple Node pools
 - Diagnostics logging for master node
 
 Reference the module to a specific version (recommended):
@@ -75,13 +75,64 @@ variable "agent_pool_subnet_id" {
 
 ```sh
 variable "agent_pools" {
-  description = "(Required) List of agent_pools profile"
-  default = [
-    # "name", "count", "vm_size", "os_type", "os_disk_size_gb", "type", "enable_auto_scaling", "min_count", "max_count", "max_pods"
-    ["default", "1", "Standard_D2s_v3", "Linux", "50", "VirtualMachineScaleSets", "true", "1", "3", "30"]
-  ]
+  description = "(Optional) List of agent_pools profile for multiple node pools"
+  type = list(object({
+    name                = string
+    count               = number
+    vm_size             = string
+    os_type             = string
+    os_disk_size_gb     = number
+    max_pods            = number
+    availability_zones  = list(number)
+    enable_auto_scaling = bool
+    min_count           = number
+    max_count           = number
+  }))
+  default = [{
+    name                = "default"
+    count               = 1
+    vm_size             = "Standard_D2s_v3"
+    os_type             = "Linux"
+    os_disk_size_gb     = 50
+    max_pods            = 30
+    availability_zones  = [1, 2, 3]
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 3
+  }]
 }
 ```
+
+Example
+
+Multiple node pools with different VM type (SKU)
+```sh
+agent_pools = [{
+    name                = "pool1"
+    count               = 1
+    vm_size             = "Standard_D2s_v3"
+    os_type             = "Linux"
+    os_disk_size_gb     = 50
+    max_pods            = 30
+    availability_zones  = [1, 2, 3]
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 3
+  },
+  {
+    name                = "pool2"
+    count               = 1
+    vm_size             = "Standard_D4s_v3"
+    os_type             = "Linux"
+    os_disk_size_gb     = 30
+    max_pods            = 30
+    availability_zones  = [1, 2, 3]
+    enable_auto_scaling = true
+    min_count           = 1
+    max_count           = 3
+}]
+```
+
 ## linux_admin_username
 
 ```sh
@@ -171,6 +222,10 @@ variable "network_profile" {
 ```sh
 variable "service_principal" {
   description = "(Required) The Service Principal to create aks."
+  type = object({
+    client_id     = string
+    client_secret = string
+  })
 }
 ```
 
@@ -220,3 +275,21 @@ variable "diagnostics_map" {
   }
 }
 ```
+
+# Output
+
+## [kube_config](https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#kube_config)
+
+## [kube_config_raw](https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#kube_config_raw)
+
+## [ssh_key](https://www.terraform.io/docs/providers/tls/r/private_key.html#algorithm-1)
+
+## config
+
+Run the following commands to configure kubernetes clients:
+
+$ terraform output kube_config_raw > ~/.kube/aksconfig
+
+$ export KUBECONFIG=~/.kube/aksconfig
+
+
