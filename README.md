@@ -293,3 +293,6 @@ $ terraform output kube_config_raw > ~/.kube/aksconfig
 $ export KUBECONFIG=~/.kube/aksconfig
 
 
+# Contribute
+
+Pull requests are welcome to evolve this module and integrate new features.
