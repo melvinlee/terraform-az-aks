@@ -274,20 +274,27 @@ variable "diagnostics_map" {
 
 # Output
 
-## [kube_config](https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#kube_config)
-
-## [kube_config_raw](https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#kube_config_raw)
+| Name            	| Description                                                            	|
+|-----------------	|------------------------------------------------------------------------	|
+| kube_config     	| kube_config block that comprised crendetials                           	|
+| kube_config_raw 	| Raw Kubernetes config to be used by kubectl and other compatible tools 	|
+| ssh_key           | The private key used by worker nodes |
 
 ## [ssh_key](https://www.terraform.io/docs/providers/tls/r/private_key.html#algorithm-1)
 
-## config
 
-Run the following commands to configure kubernetes clients:
+NOTE: kube_config credentials can be used with the Kubernetes Provider like so:
 
-$ terraform output kube_config_raw > ~/.kube/aksconfig
-
-$ export KUBECONFIG=~/.kube/aksconfig
-
+```sh
+provider "kubernetes" {
+  host                   = "${azurerm_kubernetes_cluster.main.kube_config.0.host}"
+  username               = "${azurerm_kubernetes_cluster.main.kube_config.0.username}"
+  password               = "${azurerm_kubernetes_cluster.main.kube_config.0.password}"
+  client_certificate     = "${base64decode(azurerm_kubernetes_cluster.main.kube_config.0.client_certificate)}"
+  client_key             = "${base64decode(azurerm_kubernetes_cluster.main.kube_config.0.client_key)}"
+  cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.main.kube_config.0.cluster_ca_certificate)}"
+}
+``
 
 # Contribute
 
