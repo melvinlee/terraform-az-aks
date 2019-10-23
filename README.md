@@ -280,9 +280,6 @@ variable "diagnostics_map" {
 | kube_config_raw 	| Raw Kubernetes config to be used by kubectl and other compatible tools 	|
 | ssh_key           | The private key used by worker nodes |
 
-## [ssh_key](https://www.terraform.io/docs/providers/tls/r/private_key.html#algorithm-1)
-
-
 NOTE: kube_config credentials can be used with the Kubernetes Provider like so:
 
 ```sh
@@ -294,7 +291,7 @@ provider "kubernetes" {
   client_key             = "${base64decode(azurerm_kubernetes_cluster.main.kube_config.0.client_key)}"
   cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.main.kube_config.0.cluster_ca_certificate)}"
 }
-``
+```
 
 # Contribute
 
