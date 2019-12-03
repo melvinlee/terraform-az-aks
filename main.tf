@@ -26,7 +26,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       os_type             = agent_pool_profile.value.os_type
       os_disk_size_gb     = agent_pool_profile.value.os_disk_size_gb
       vnet_subnet_id      = var.agent_pool_subnet_id
-      type                = "VirtualMachineScaleSets"
+      type                = agent_pool_profile.value.type
       availability_zones  = agent_pool_profile.value.availability_zones
       enable_auto_scaling = agent_pool_profile.value.enable_auto_scaling
       min_count           = agent_pool_profile.value.min_count
@@ -41,9 +41,13 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   addon_profile {
-    oms_agent {
-      enabled                    = var.addon_profile.oms_agent.enabled
-      log_analytics_workspace_id = var.log_analytics_workspace
+    dynamic "oms_agent" {
+      for_each = lookup(var.addon_profile.oms_agent, "enabled", false) == true ? [1] : []
+
+      content {
+        enabled                    = var.addon_profile.oms_agent.enabled
+        log_analytics_workspace_id = var.monitoring_log_analytics_workspace_id
+      }
     }
 
     http_application_routing {

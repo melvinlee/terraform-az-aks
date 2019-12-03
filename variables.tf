@@ -10,12 +10,12 @@ variable "location" {
 
 variable "name" {
   description = "(Required) The name of the Managed Kubernetes Cluster to create."
-  type        = "string"
+  type        = string
 }
 
 variable "aks_node_rg" {
   description = "(Optional) The name of the Resource Group where the the Kubernetes Nodes should exist."
-  type        = "string"
+  type        = string
   default     = null
 }
 
@@ -31,6 +31,7 @@ variable "agent_pools" {
     vm_size             = string
     os_type             = string
     os_disk_size_gb     = number
+    type                = string
     max_pods            = number
     availability_zones  = list(number)
     enable_auto_scaling = bool
@@ -43,6 +44,7 @@ variable "agent_pools" {
     vm_size             = "Standard_D2s_v3"
     os_type             = "Linux"
     os_disk_size_gb     = 50
+    type                = "VirtualMachineScaleSets"
     max_pods            = 30
     availability_zones  = [1, 2, 3]
     enable_auto_scaling = true
@@ -53,7 +55,7 @@ variable "agent_pools" {
 
 variable "linux_admin_username" {
   description = "(Optional) User name for authentication to the Kubernetes linux agent virtual machines in the cluster."
-  type        = "string"
+  type        = string
   default     = "azureuser"
 }
 
@@ -70,7 +72,7 @@ variable "addon_profile" {
   description = "(Optional) AddOn Profile block."
   default = {
     oms_agent = {
-      enabled = true # Enable Container Monitoring
+      enabled = false # Enable Container Monitoring
     }
     http_application_routing = {
       enabled = false # Disable HTTP Application Routing
@@ -81,7 +83,7 @@ variable "addon_profile" {
   }
 }
 
-variable "log_analytics_workspace" {
+variable "monitoring_log_analytics_workspace_id" {
   description = "(Optional) The ID of the Log Analytics Workspace which the OMS Agent should send data to."
   default     = null
 }
@@ -129,8 +131,9 @@ variable "diagnostics_logs_map" {
 variable "diagnostics_map" {
   description = "(Optional) Storage Account and Event Hub data for the AKS diagnostics"
   default = {
-    diags_sa = null
-    eh_id    = ""
-    eh_name  = null
+    log_analytics_workspace_id = null
+    diags_sa                   = null
+    eh_id                      = ""
+    eh_name                    = null
   }
 }
