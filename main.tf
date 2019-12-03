@@ -72,5 +72,5 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku  = var.network_profile.load_balancer_sku
   }
 
-  tags = var.tags
+  tags = local.tags
 }
