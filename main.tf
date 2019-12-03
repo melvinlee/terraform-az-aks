@@ -10,12 +10,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
     admin_username = var.linux_admin_username
 
     ssh_key {
-      key_data = "${trimspace(tls_private_key.key.public_key_openssh)}"
+      key_data = trimspace(tls_private_key.key.public_key_openssh)
     }
   }
 
   #retrieve the latest version of Kubernetes supported by Azure Kubernetes Service if version is not set
-  kubernetes_version = "${var.kubernetes_version != "" ? var.kubernetes_version : data.azurerm_kubernetes_service_versions.current.latest_version}"
+  kubernetes_version = var.kubernetes_version != "" ? var.kubernetes_version : data.azurerm_kubernetes_service_versions.current.latest_version
 
   dynamic "agent_pool_profile" {
     for_each = var.agent_pools
