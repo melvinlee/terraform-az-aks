@@ -71,15 +71,9 @@ variable "tags" {
 variable "addon_profile" {
   description = "(Optional) AddOn Profile block."
   default = {
-    oms_agent = {
-      enabled = false # Enable Container Monitoring
-    }
-    http_application_routing = {
-      enabled = false # Disable HTTP Application Routing
-    }
-    kube_dashboard = {
-      enabled = false # Disable Kubernetes Dashboard
-    }
+    oms_agent_enabled = false # Enable Container Monitoring
+    http_application_routing_enabled = false # Disable HTTP Application Routing
+    kube_dashboard_enabled = false # Disable Kubernetes Dashboard
   }
 }
 

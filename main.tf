@@ -42,21 +42,37 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   addon_profile {
     dynamic "oms_agent" {
-      for_each = lookup(var.addon_profile.oms_agent, "enabled", false) == true ? [1] : []
+      for_each = lookup(var.addon_profile, "oms_agent_enabled", false) == true ? [1] : []
 
       content {
-        enabled                    = var.addon_profile.oms_agent.enabled
+        enabled                    = var.addon_profile.oms_agent_enabled
         log_analytics_workspace_id = var.monitoring_log_analytics_workspace_id
       }
     }
 
-    http_application_routing {
-      enabled = var.addon_profile.http_application_routing.enabled
+    dynamic "http_application_routing" {
+      for_each = lookup(var.addon_profile, "http_application_routing_enabled", false) == true ? [1] : []
+
+      content {
+        enabled = var.addon_profile.http_application_routing_enabled
+      }
     }
 
-    kube_dashboard {
-      enabled = var.addon_profile.kube_dashboard.enabled
+    dynamic "kube_dashboard" {
+      for_each = lookup(var.addon_profile, "kube_dashboard_enabled", false) == true ? [1] : []
+
+      content {
+        enabled = var.addon_profile.kube_dashboard_enabled
+      }
     }
+
+    # http_application_routing {
+    #   enabled = var.addon_profile.http_application_routing.enabled
+    # }
+
+    # kube_dashboard {
+    #   enabled = var.addon_profile.kube_dashboard.enabled
+    # }
   }
 
   role_based_access_control {
