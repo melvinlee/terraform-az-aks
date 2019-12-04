@@ -1,4 +1,3 @@
-// Creates the diagnostics settings for the virtual network object
 resource "azurerm_monitor_diagnostic_setting" "aks_diag" {
 
   name                           = "${azurerm_kubernetes_cluster.aks.name}-diag"
