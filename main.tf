@@ -69,7 +69,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     service_cidr       = var.network_profile.service_cidr
     dns_service_ip     = var.network_profile.dns_service_ip
     docker_bridge_cidr = var.network_profile.docker_bridge_cidr
-    load_balancer_sku  = var.network_profile.load_balancer_sku
+    load_balancer_sku  = lookup(var.network_profile, "load_balancer_sku", "basic")
   }
 
   tags = local.tags

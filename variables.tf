@@ -99,7 +99,7 @@ variable "network_profile" {
     dns_service_ip     = "10.100.0.10"
     docker_bridge_cidr = "172.17.0.1/16"
     # Specifies the SKU of the Load Balancer used for this Kubernetes Cluster. Use standard for when enable agent_pools availability_zones.
-    load_balancer_sku = "Standard"
+    load_balancer_sku = "basic"
   }
 }
 

@@ -3,10 +3,10 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diag" {
 
   name                           = "${azurerm_kubernetes_cluster.aks.name}-diag"
   target_resource_id             = azurerm_kubernetes_cluster.aks.id
-  eventhub_name                  = var.diagnostics_map.eh_name
-  eventhub_authorization_rule_id = length(var.diagnostics_map.eh_id) > 1 ? "${var.diagnostics_map.eh_id}/authorizationrules/RootManageSharedAccessKey" : null
+  eventhub_name                  = lookup(var.diagnostics_map, "eh_name", null)
+  eventhub_authorization_rule_id = length(lookup(var.diagnostics_map, "eh_id","")) > 1 ? "${var.diagnostics_map.eh_id}/authorizationrules/RootManageSharedAccessKey" : null
   log_analytics_workspace_id     = var.diagnostics_map.log_analytics_workspace_id
-  storage_account_id             = var.diagnostics_map.diags_sa
+  storage_account_id             = lookup(var.diagnostics_map, "diags_sa", null)
 
   dynamic "log" {
     for_each = var.diagnostics_logs_map.log
