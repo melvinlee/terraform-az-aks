@@ -10,7 +10,7 @@ Reference the module to a specific version (recommended):
 
 ```sh
 module "aks" {
-    source = "git://github.com/melvinlee/aks-tf-module.git?ref=v0.1"
+    source = "git://github.com/melvinlee/terraform-az-aks.git?ref=v0.1"
 
     aks_rg = var.aks_rg
     location = var.location
@@ -21,7 +21,7 @@ module "aks" {
 Or get the latest version
 
 ```sh
-source = "git://github.com/melvinlee/aks-tf-module.git?ref=vlatest"
+source = "git://github.com/melvinlee/terraform-az-aks.git?ref=latest"
 ```
 
 # Parameters
