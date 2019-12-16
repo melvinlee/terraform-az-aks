@@ -1,6 +1,6 @@
 resource "azurerm_monitor_diagnostic_setting" "aks_diag" {
 
-  count                          = (var.diagnostics_map.log_analytics_workspace_id != "" || lookup(var.diagnostics_map, "eh_name", null) != null) ? 1 : 0
+  count = (var.diagnostics_map.log_analytics_workspace_id != "" || lookup(var.diagnostics_map, "eh_name", null) != null) ? 1 : 0
 
   name                           = "${azurerm_kubernetes_cluster.aks.name}-diag"
   target_resource_id             = azurerm_kubernetes_cluster.aks.id
