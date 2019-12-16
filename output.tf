@@ -1,11 +1,11 @@
 output "kube_config" {
-  value = azurerm_kubernetes_cluster.aks.kube_config
-  sensitive   = true
+  value     = azurerm_kubernetes_cluster.aks.kube_config
+  sensitive = true
 }
 
 output "kube_config_raw" {
-  value = azurerm_kubernetes_cluster.aks.kube_config_raw
-  sensitive   = true
+  value     = azurerm_kubernetes_cluster.aks.kube_config_raw
+  sensitive = true
 }
 
 output "config" {
@@ -21,6 +21,6 @@ CONFIGURE
 }
 
 output "ssh_key" {
-  value = tls_private_key.key
-  sensitive   = true
+  value     = tls_private_key.key
+  sensitive = true
 }
